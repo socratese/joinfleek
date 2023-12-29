@@ -1,0 +1,14 @@
+{
+  "name": "shopify-discord-monitor",
+  "version": "1.0.0",
+  "description": "A Node.js project to monitor Shopify products and send alerts to Discord.",
+  "main": "monitor.js",
+  "scripts": {
+    "start": "node monitor.js"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
