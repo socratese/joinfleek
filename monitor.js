@@ -1,22 +1,18 @@
 const axios = require('axios');
 
 let lastId = null;
-const discordWebhookUrl = 'https://discord.com/api/webhooks/1120091425569259550/DjmW8MAukEKRaSS8h7KvH1ZkW5dBt-iNGHPb76Rt2Y-zmrk63CAmRJrzxv61dvkU0Bl8';
+const discordWebhookUrl = 'https://discord.com/api/webhooks/942549263550922763/VVsR7fSE3ihVguEfitYLQheTQdVFnDVMWJ5HwOs5F7-VfpuHBvFotjarkJ08Vz9ti6cc';
 
 async function sendToDiscord(product) {
     const sizes = product.variants.map(variant => variant.title).join(', ');
     const restockTime = new Date().toLocaleString();
     const addToCartLink = `https://joinfleek.com/cart/${product.variants[0].id}:1`; // Add to cart link
 
-    // Check if body_html is not null before using replace
-    const description = product.body_html ? product.body_html.replace(/<[^>]+>/g, '') : 'No description available';
-
     let message = {
         content: 'New product restocked!',
         embeds: [{
             title: product.title,
             url: `https://joinfleek.com/products/${product.handle}`,
-            description: description,
             color: 0x008000, // Green color
             fields: [
                 { name: 'Title', value: product.title },
@@ -29,7 +25,7 @@ async function sendToDiscord(product) {
                 url: product.images[0] ? product.images[0].src : 'https://via.placeholder.com/150' // Placeholder image if product image is not available
             },
             footer: {
-                text: `Product ID: ${product.id}`
+                text: `Pingted`
             }
         }]
     };
@@ -41,7 +37,6 @@ async function sendToDiscord(product) {
         console.error('Failed to send message to Discord:', error);
     }
 }
-
 
 async function checkProduct() {
     let config = {
@@ -78,10 +73,6 @@ async function checkProduct() {
     // Set a delay before the next check (only if not handling a 430 response)
     setTimeout(checkProduct, 60000); // 60 seconds
 }
-
-// Start checking
-checkProduct();
-
 
 // Start checking
 checkProduct();
