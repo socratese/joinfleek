@@ -6,28 +6,25 @@ const discordWebhookUrl = 'https://discord.com/api/webhooks/942549263550922763/V
 async function sendToDiscord(product) {
     const sizes = product.variants.map(variant => variant.title).join(', ');
     const restockTime = new Date().toLocaleString();
-    const addToCartLink = `https://joinfleek.com/cart/${product.variants[0].id}:1`; // Add to cart link
+    const addToCartLink = `https://joinfleek.com/cart/${product.variants[0].id}:1`;
 
     let message = {
-        content: 'New product restocked!',
+        content: null,
         embeds: [{
             title: product.title,
-            url: `https://joinfleek.com/products/${product.handle}`,
-            color: 0x008000, // Green color
+            description: product.description || 'No description available', // Adding description
+            color: 32372, // Specified color
             fields: [
-                { name: 'Title', value: product.title },
-                { name: 'Available Sizes', value: sizes, inline: true },
                 { name: 'Price', value: `$${product.variants[0].price}`, inline: true },
-                { name: 'Restocked At', value: restockTime, inline: false },
-                { name: 'Add to Cart', value: `[Add to Cart](${addToCartLink})`, inline: false } // Add to cart field
+                { name: 'Nb Pieces', value: sizes, inline: true }, // Assuming Nb Pieces refers to sizes
+                { name: 'ATC', value: `[Add to Cart](${addToCartLink})`, inline: true }
             ],
-            image: {
-                url: product.images[0] ? product.images[0].src : 'https://via.placeholder.com/150' // Placeholder image if product image is not available
-            },
             footer: {
-                text: `Pingted`
+                text: 'by PING\'TED',
+                icon_url: 'https://media.discordapp.net/attachments/1120842107536547896/1122795178042867782/logo_pingted_png.png?width=605&height=605'
             }
-        }]
+        }],
+        attachments: []
     };
 
     try {
@@ -51,11 +48,10 @@ async function checkProduct() {
     try {
         let response = await axios.request(config);
 
-        // Check for 430 response code
         if (response.status === 430) {
             console.log('Received 430 response. Pausing for 5 minutes.');
-            setTimeout(checkProduct, 300000); // Wait for 5 minutes (300000 milliseconds)
-            return; // Early return to prevent further execution
+            setTimeout(checkProduct, 300000);
+            return;
         }
 
         let product = response.data.products[0];
@@ -70,9 +66,7 @@ async function checkProduct() {
         console.error('Error fetching product data:', error);
     }
 
-    // Set a delay before the next check (only if not handling a 430 response)
-    setTimeout(checkProduct, 60000); // 60 seconds
+    setTimeout(checkProduct, 60000);
 }
 
-// Start checking
 checkProduct();
