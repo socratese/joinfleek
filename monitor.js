@@ -3,6 +3,9 @@ const axios = require('axios');
 let lastId = null;
 const discordWebhookUrl = 'https://discord.com/api/webhooks/942549263550922763/VVsR7fSE3ihVguEfitYLQheTQdVFnDVMWJ5HwOs5F7-VfpuHBvFotjarkJ08Vz9ti6cc';
 
+let retryCount = 0;
+const maxRetries = 5;
+
 async function sendToDiscord(product) {
     const sizes = product.variants.map(variant => variant.title).join(', ');
     const restockTime = new Date().toLocaleString();
@@ -12,11 +15,11 @@ async function sendToDiscord(product) {
         content: null,
         embeds: [{
             title: product.title,
-            description: product.description || 'No description available', // Adding description
-            color: 32372, // Specified color
+            description: product.description || 'No description available',
+            color: 32372,
             fields: [
                 { name: 'Price', value: `$${product.variants[0].price}`, inline: true },
-                { name: 'Nb Pieces', value: sizes, inline: true }, // Assuming Nb Pieces refers to sizes
+                { name: 'Nb Pieces', value: sizes, inline: true },
                 { name: 'ATC', value: `[Add to Cart](${addToCartLink})`, inline: true }
             ],
             footer: {
@@ -50,7 +53,7 @@ async function checkProduct() {
 
         if (response.status === 430) {
             console.log('Received 430 response. Pausing for 5 minutes.');
-            setTimeout(checkProduct, 300000);
+            setTimeout(checkProduct, 300000); // 5 minutes in milliseconds
             return;
         }
 
@@ -62,10 +65,19 @@ async function checkProduct() {
         } else {
             console.log('No new product detected');
         }
+        // Reset retry count after a successful request
+        retryCount = 0;
     } catch (error) {
         console.error('Error fetching product data:', error);
+
+        // Setting a constant delay of 5 minutes
+        const delay = 5 * 60 * 1000; // 5 minutes in milliseconds
+        console.log(`Retrying in ${delay / 1000 / 60} minutes...`);
+        setTimeout(checkProduct, delay);
+        return;
     }
 
+    // Always schedule the next check
     setTimeout(checkProduct, 60000);
 }
 
