@@ -1,6 +1,8 @@
 const axios = require('axios');
 
 let lastId = null;
+let retryCount = 0;
+const maxRetries = 5;
 const discordWebhookUrl = 'https://discord.com/api/webhooks/1170717500149862420/7Tca_BQKdPRSFxHEbwt4ZJxMmOFYSMTEMYwvxWsZ6vwJFqN3gFGrJEoji9IFAvbotdz2';
 
 async function sendToDiscord(product) {
@@ -38,7 +40,6 @@ async function sendToDiscord(product) {
     }
 }
 
-
 async function checkProduct() {
     let config = {
         method: 'get',
@@ -54,7 +55,7 @@ async function checkProduct() {
 
         if (response.status === 430) {
             console.log('Received 430 response. Pausing for 5 minutes.');
-            setTimeout(checkProduct, 300000);
+            setTimeout(checkProduct, 300000); // 5 minutes
             return;
         }
 
@@ -66,10 +67,25 @@ async function checkProduct() {
         } else {
             console.log('No new product detected');
         }
+        // Reset retry count after a successful request
+        retryCount = 0;
     } catch (error) {
         console.error('Error fetching product data:', error);
+
+        if (retryCount < maxRetries) {
+            // Set a constant delay of 5 minutes
+            const delay = 5 * 60 * 1000; // 5 minutes in milliseconds
+            console.log(`Retrying in ${delay / 1000 / 60} minutes...`);
+            setTimeout(checkProduct, delay);
+            retryCount++;
+        } else {
+            console.log('Max retries reached. Will try again in the regular interval.');
+            retryCount = 0;
+        }
+        return;
     }
 
+    // Always schedule the next check
     setTimeout(checkProduct, 60000);
 }
 
