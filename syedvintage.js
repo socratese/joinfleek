@@ -3,7 +3,7 @@ const axios = require('axios');
 let lastId = null;
 let retryCount = 0;
 const maxRetries = 5;
-const discordWebhookUrl = 'https://discord.com/api/webhooks/1170717500149862420/7Tca_BQKdPRSFxHEbwt4ZJxMmOFYSMTEMYwvxWsZ6vwJFqN3gFGrJEoji9IFAvbotdz2';
+const discordWebhookUrl = '';
 
 async function sendToDiscord(product) {
     const sizes = product.variants.map(variant => variant.title).join(', ');
@@ -17,7 +17,7 @@ async function sendToDiscord(product) {
         embeds: [{
             title: product.title,
             description: tagsString, // Use tags string as description
-            color: 32372,
+            color: 3447003,
             fields: [
                 { name: 'Price', value: `$${product.variants[0].price}`, inline: true },
                 { name: 'Nb Pieces', value: sizes, inline: true },
@@ -25,8 +25,8 @@ async function sendToDiscord(product) {
             ],
             image: { url: imageUrl }, // Add the image URL here
             footer: {
-                text: 'by PING\'TED',
-                icon_url: 'https://media.discordapp.net/attachments/1120842107536547896/1122795178042867782/logo_pingted_png.png?width=605&height=605'
+                text: 'Resell Vault',
+                icon_url: 'https://media.discordapp.net/attachments/1201619287765430362/1210584936700977192/Resell_Vault_Logo.png?ex=65eb1814&is=65d8a314&hm=7323219e720838b23420e2558af08cd98ef0aed39348276ca63bd733e3321796&=&format=webp&quality=lossless&width=540&height=540'
             }
         }],
         attachments: []
