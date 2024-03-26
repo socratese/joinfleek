@@ -9,7 +9,7 @@ const maxRetries = 5;
 async function sendToDiscord(product) {
     const sizes = product.variants.map(variant => variant.title).join(', ');
     const restockTime = new Date().toLocaleString();
-    const addToCartLink = `https://joinfleek.com/cart/${product.variants[0].id}:1`;
+    const addToCartLink = `https://joinfleek.myshopify.com/cart/${product.variants[0].id}:1`;
 
     let message = {
         content: null,
