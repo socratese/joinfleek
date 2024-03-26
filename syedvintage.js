@@ -3,7 +3,7 @@ const axios = require('axios');
 let lastId = null;
 let retryCount = 0;
 const maxRetries = 5;
-const discordWebhookUrl = '';
+const discordWebhookUrl = 'https://discord.com/api/webhooks/1222224132658430002/slILBugn19O34saKHD0rzbAM8TIGiSmRJFMBYhX0DEY57-G2YuwjNwRNu9evLcGcUNzl';
 
 async function sendToDiscord(product) {
     const sizes = product.variants.map(variant => variant.title).join(', ');
