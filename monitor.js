@@ -42,7 +42,7 @@ async function checkProduct() {
     let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://joinfleek.com/products.json',
+        url: 'https://joinfleek.myshopify.com/products.json',
         headers: { 
             'Cookie': '_shopify_s=efe19fc2-6c5a-41c9-9a8e-11b768f0025f; _shopify_y=dceada5b-3a51-4c8b-9a75-bb522884cf2c; cart_currency=USD'
         }
