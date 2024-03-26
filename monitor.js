@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 let lastId = null;
-const discordWebhookUrl = '';
+const discordWebhookUrl = 'https://discord.com/api/webhooks/1222224132658430002/slILBugn19O34saKHD0rzbAM8TIGiSmRJFMBYhX0DEY57-G2YuwjNwRNu9evLcGcUNzl';
 
 let retryCount = 0;
 const maxRetries = 5;
